@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Cart | FarmConnect</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Bmycart.css') }}">
+  <style>
+    .chat-button {
+      display: inline-block;
+      background-color: #2f855a;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      margin-top: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .chat-button:hover {
+      background-color: #276749;
+    }
+    .update-btn {
+      background-color: #4299e1;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+    .update-btn:hover {
+      background-color: #3182ce;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🌾 FarmConnect</div>
+    <nav>
+      <a href="/buyerdash">🏠 Home</a>
+      <form action="/logout" method="POST" style="display:inline;">
+        <button class="logout-btn">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <section class="products">
+    <h2>🛒 My Cart</h2>
+
+    <!-- ✅ TOAST FLASH MESSAGE -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="toast-container">
+          {% for msg in messages %}
+            <div class="toast">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if session.cart and session.cart|length > 0 %}
+      <div class="product-grid">
+        {% for pid, item in session.cart.items() %}
+          <div class="product-card">
+            <img src="{{ item.product_image_url }}" alt="{{ item.product_name }}">
+            <h3>{{ item.product_name }}</h3>
+            <p>₹{{ item.price }} per {{ item.unit }}</p>
+            <form action="/update-quantity/{{ pid }}" method="POST" style="margin-top: 10px;">
+            <label for="quantity">Qty:</label>
+            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" required style="width: 50px;" />
+            <button type="submit" class="update-btn">🔄 Update</button>
+            </form>
+
+
+            <!-- 💬 Negotiate Button -->
+            <a href="/chat/{{ pid }}" class="chat-button">💬 Negotiate</a>
+
+            <!-- ❌ Remove -->
+            <a href="/remove-from-cart/{{ pid }}" class="remove-btn">❌ Remove</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% set total_price = 0 %}
+{% for pid, item in session.cart.items() %}
+  {% set total_price = total_price + (item.price * item.quantity) %}
+{% endfor %}
+
+<h3 style="margin-top: 20px;">💰 Total: ₹{{ total_price }}</h3>
+
+
+      <form action="/checkout-cart" method="POST">
+        <button class="checkout-btn">✅ Place All Orders</button>
+      </form>
+    {% else %}
+      <p class="empty-message">🪹 Your cart is now empty.</p>
+    {% endif %}
+  </section>
+
+  <script>
+    // Auto-hide toast messages
+    window.addEventListener("DOMContentLoaded", () => {
+      const toasts = document.querySelectorAll(".toast");
+      toasts.forEach(toast => {
+        setTimeout(() => toast.remove(), 3000);
+      });
+    });
+  </script>
+</body>
+</html>

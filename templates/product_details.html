@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ product.name }} | FarmConnect</title>
+  <link rel="stylesheet" href="/static/product_details.css" />
+</head>
+<body>
+
+  <div class="product-container">
+    <h1>{{ product.name }}</h1>
+    
+    <div class="product-main">
+      <img src="{{ product.image or '/static/images/default-produce.jpg' }}" alt="{{ product.name }}" class="product-image" />
+
+      <div class="product-info">
+        <h2>Price: ₹{{ product.price }} per {{ product.unit or "kg" }}</h2>
+        <p><strong>📍 Location:</strong> {{ product.location }}</p>
+
+        <!-- ✅ Order Form -->
+        <form class="order-form" action="/place-order/{{ product._id }}" method="POST">
+          <label>Quantity:</label>
+          <input type="number" name="quantity" min="1" placeholder="Qty" required />
+          
+          <label>Unit:</label>
+          <select name="unit">
+            <option value="kg">kg</option>
+            <option value="quintal">quintal</option>
+          </select>
+
+          <button type="submit">🛒 Place Order</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ✅ Farmer Info -->
+    <div class="farmer-info">
+      <h3>👨‍🌾 Farmer: {{ farmer.name }}</h3>
+      <p><strong>📍 Location:</strong> {{ farmer.location }}</p>
+      <p><strong>🌿 Grows:</strong> {{ farmer.vegetables | join(', ') }}</p>
+    </div>
+
+    <!-- ✅ Chat Box (static placeholder) -->
+    <div class="chat-box">
+      <h4>💬 Chat with Farmer</h4>
+      <textarea placeholder="Type your message here..."></textarea>
+      <button>Send</button>
+    </div>
+
+    <!-- ✅ Related Products -->
+    <h3>🛒 More from {{ farmer.name }}’s Farm</h3>
+    <div class="related-products">
+      {% for item in related_products %}
+        <div class="product-card">
+          <img src="{{ item.image or '/static/images/default-produce.jpg' }}" alt="{{ item.name }}" />
+          <p>{{ item.name }}</p>
+          <p>₹{{ item.price }}</p>
+        </div>
+      {% else %}
+        <p>No other products listed.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="toast-container">
+      {% for msg in messages %}
+        <div class="toast">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+</body>
+</html>

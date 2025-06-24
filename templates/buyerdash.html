@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FarmConnect | Buyer Dashboard</title>
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='buyerdash.css') }}">
+</head>
+<body>
+
+  <!-- ✅ Modern Top Navigation Bar -->
+  <header class="top-navbar">
+    <div class="logo">🌿 FarmConnect</div>
+    <nav class="top-nav-menu">
+      <a href="/buyerdash" class="active">Dashboard</a>
+      <a href="/Bmyorders">My Orders</a>
+      <a href="/Bsettings">Settings</a>
+      <form action="/logout" method="POST" style="display:inline;">
+        <button type="submit" class="nav-link logout-btn">Logout</button>
+      </form>
+    </nav>
+
+<div class="profile-section">
+      <!-- ✅ Cart Icon with badge -->
+      <a id="cart-link" href="/Bmycart" class="icon-link cart-link">
+    <i class="fa-solid fa-cart-shopping cart-icon"></i>
+    <span id="cartBadge" {% if cart_count == 0 %} style="display:none"{% endif %}>
+      {{ cart_count }}
+    </span>
+  </a>
+      
+
+
+ <!-- Profile Icon -->
+    <a href="/Bsettings" class="profile-link">
+      <i class="fa-solid fa-user profile-icon"></i>
+    </a>
+  </div>
+</header>
+
+  <!-- ✅ Hero Section -->
+  <section class="hero">
+    <h1>Welcome to FarmConnect</h1>
+    <p>Fresh produce direct from farmers to your doorstep.</p>
+  </section>
+
+  <!-- ✅ Main Content Layout -->
+  <div class="main-content">
+    <!-- ✅ Available Products Header -->
+    <div class="products-header">
+      <h2>🧺 Available Products</h2>
+    </div>
+
+    <!-- ✅ Search + Sort -->
+    <div class="product-controls-top">
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search for produce..." />
+      <select id="sortSelect" class="sort-dropdown">
+        <option value="">Sort by</option>
+        <option value="low-high">Price: Low to High</option>
+        <option value="high-low">Price: High to Low</option>
+      </select>
+    </div>
+
+    <!-- ✅ Filter Buttons -->
+    <div class="inline-filters">
+      <div class="category-buttons">
+        <button class="filter-btn active">✔ All</button>
+        <button class="filter-btn">Vegetables</button>
+        <button class="filter-btn">Fruits</button>
+        <button class="filter-btn">Dairy</button>
+        <button class="filter-btn">Meat</button>
+        <button class="filter-btn">Herbs</button>
+        <button class="filter-btn">Honey</button>
+        <button class="filter-btn">Eggs</button>
+        <button class="filter-btn">Grains</button>
+        <button class="filter-btn">Imported</button>
+      </div>
+    </div>
+
+
+    <!-- ✅ Products Grid -->
+    <div class="product-grid" id="productGrid">
+      {% if products %}
+        {% for product in products %}
+          <div class="product-card"
+                data-name="{{ product.name | lower }}"
+                data-category="{{ product.category | lower }}"
+                data-price="{{ product.price }}">
+
+            <img src="{{ (product.image or url_for('static', filename='images/default-produce.jpg')).replace(' ', '%20') }}"
+            onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/default-produce.jpg') }}'"alt="{{ product.name }}">
+            
+            <div class="product-info">
+              <h3>{{ product.name }}</h3>
+              <p class="price">₹{{ product.price }} / {{ product.unit }}</p>
+
+              <form class="add-to-cart-form" data-product-id="{{ product._id }}">
+                <div class="qty-box">
+                  <button type="button" onclick="updateQty('{{ product._id }}', -1)">−</button>
+                  <span id="qty-{{ product._id }}">{{ cart[product.name] or 1 }}</span>
+                  <button type="button" onclick="updateQty('{{ product._id }}', 1)">+</button>
+                </div>
+                <input type="hidden" name="quantity" id="qty-input-{{ product._id }}" value="{{ cart[product.name] or 1 }}">
+                <button type="submit" class="add-cart-btn">Add to Cart</button>
+              </form>
+
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="grid-column: 1 / -1; text-align: center; color: #777;">No products available yet.</p>
+      {% endif %}
+    </div>
+  </div> <!-- ✅ CLOSE main-content -->
+
+  <!-- ✅ Toast Flash Messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="toast-container">
+        {% for msg in messages %}
+          <div class="toast">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ✅ Extra Toast Container for JS messages -->
+  <div id="js-toast-container" class="toast-container"></div>
+
+  <!-- ✅ JS -->
+  <script src="{{ url_for('static', filename='javascript/buyerdash.js') }}"></script>
+</body>
+</html>

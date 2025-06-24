@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Negotiation Chat</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #14532d;
+      margin-bottom: 5px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 8px 14px;
+      background-color: #c6f6d5;
+      color: #14532d;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid #9ae6b4;
+    }
+
+    .back-button:hover {
+      background-color: #9ae6b4;
+    }
+
+    #chat-box {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #38a169;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2f855a;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Negotiation Chat</h2>
+  <a class="back-button" href="javascript:history.back()">← Back</a>
+
+  <div id="chat-box"></div>
+
+  <div class="chat-input">
+    <input type="text" id="message" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const socket = io();
+    const room = "{{ room_id }}";
+    const user = "{{ user_name }}";
+    const chatBox = document.getElementById("chat-box");
+
+    function scrollToBottom() {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ✅ Load past messages
+    fetch(`/messages-json/${room}`)
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(msg => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${msg.from}:</strong> ${msg.text}`;
+          chatBox.appendChild(div);
+        });
+        scrollToBottom();
+      });
+
+    // ✅ Join the room
+    socket.emit('join_room', { room });
+
+    // ✅ Only ONE listener for receive_message
+    socket.on('receive_message', (msg) => {
+      const div = document.createElement("div");
+      div.innerHTML = `<strong>${msg.from}:</strong> ${msg.text}`;
+      chatBox.appendChild(div);
+      scrollToBottom();
+    });
+
+    // ✅ Send message
+    function sendMessage() {
+      const input = document.getElementById("message");
+      const text = input.value.trim();
+      if (text !== "") {
+        socket.emit("send_message", { room, from: user, text });
+        input.value = "";
+        location.reload();
+      }
+    }
+  </script>
+
+</body>
+</html>

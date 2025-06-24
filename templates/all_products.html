@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Products - FarmConnect</title>
+  <link rel="stylesheet" href="/static/all_products.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/"><h1>Farm<span>Connect</span></h1></a>
+    </div>
+
+    <div class="nav-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search for produce..." />
+    </div>
+  </nav>
+
+  <!-- Layout -->
+  <div class="browse-layout">
+    <!-- Filters -->
+    <aside class="filters-panel">
+      <h3>Filters</h3>
+
+      <div class="filter-group">
+        <label>Categories</label>
+        <div class="category-buttons">
+          <button class="filter-btn active" onclick="selectCategory('All')">✔ All</button>
+          <button class="filter-btn" onclick="selectCategory('Vegetables')">Vegetables</button>
+          <button class="filter-btn" onclick="selectCategory('Fruits')">Fruits</button>
+          <button class="filter-btn" onclick="selectCategory('Dairy')">Dairy</button>
+          <button class="filter-btn" onclick="selectCategory('Meat')">Meat</button>
+          <button class="filter-btn" onclick="selectCategory('Herbs')">Herbs</button>
+          <button class="filter-btn" onclick="selectCategory('Honey')">Honey</button>
+          <button class="filter-btn" onclick="selectCategory('Eggs')">Eggs</button>
+          <button class="filter-btn" onclick="selectCategory('Grains')">Grains</button>
+          <button class="filter-btn" onclick="selectCategory('Imported')">Imported</button>
+        </div>
+      </div>
+
+      <!-- <div class="filter-group">
+        <label for="priceRange">Price Range</label>
+        <input type="range" id="priceRange" min="0" max="2000" value="2000" oninput="updatePriceLabel()" />
+        <div class="range-labels">
+          <span>₹0</span><span>₹<span id="maxPrice">2000</span></span>
+        </div>
+      </div>
+    -->
+      <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <!-- Products -->
+    <section class="products-panel">
+      <div class="products-header">
+        <h2 class="page-title">Browse Farm Products</h2>
+        <select id="sortSelect">
+          <option value="">Sort by</option>
+          <option value="low-high">Price: Low to High</option>
+          <option value="high-low">Price: High to Low</option>
+        </select>
+      </div>
+
+      <div class="product-listings" id="productGrid"></div>
+    </section>
+  </div>
+
+  <script src="/static/javascript/all_products.js"></script>
+</body>
+</html>

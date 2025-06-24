@@ -1,0 +1,20 @@
+<!-- templates/update_order.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Order</title>
+</head>
+<body>
+  <h2>Update Order: {{ order.product_name }}</h2>
+  <form method="POST">
+    <label for="status">Update Status:</label>
+    <select name="status" id="status">
+      <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+      <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+      <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+      <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+    </select>
+    <button type="submit">Update</button>
+  </form>
+</body>
+</html>

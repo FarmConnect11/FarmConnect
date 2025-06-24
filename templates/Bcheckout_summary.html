@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Summary</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='buyerdash.css') }}">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🌾 FarmConnect</div>
+  </header>
+
+  <section class="products">
+    <h2>Confirm Your Order</h2>
+<table>
+  <tr><th>Item</th><th>Qty</th><th>Unit</th><th>Price</th></tr>
+  {% for item in cart %}
+    <tr>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.unit }}</td>
+      <td>₹{{ item.price }}</td>
+    </tr>
+  {% endfor %}
+</table>
+<p><strong>Total:</strong> ₹{{ total }}</p>
+
+<form action="/checkout-cart" method="POST">
+  <button type="submit">✅ Place Final Order</button>
+</form>
+  </section>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="toast-container">
+      {% for msg in messages %}
+        <div class="toast">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orders | Farmer Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='farmerdash.css') }}">
+  <style>
+    .chat-button {
+      background-color: #38a169;
+      color: white;
+      padding: 6px 14px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .chat-button:hover {
+      background-color: #2f855a;
+    }
+    
+  .status-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status-form select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    width: 150px;
+    background-color: #f0fdf4;
+    color: #2f855a;
+  }
+
+  .status-form select:focus {
+    outline: none;
+    border-color: #38a169;
+    box-shadow: 0 0 0 2px rgba(56, 161, 105, 0.3);
+  }
+
+  .status-form button {
+    background-color: #2f855a;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .status-form button:hover {
+    background-color: #276749;
+  }
+
+  .produce-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* exactly 5 per row */
+  gap: 20px;
+  padding: 10px;
+  justify-items: center;
+}
+
+
+  .produce-card {
+  width: 210px;
+  background-color: #f0fff4;
+  border: 1px solid #d3f9d8;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+  height: 100%;
+}
+
+  .produce-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .produce-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .produce-details h3 {
+    margin: 5px 0;
+    font-size: 1.1rem;
+    color: #2f855a;
+  }
+
+  .produce-details p {
+    font-size: 0.9rem;
+    margin: 2px 0;
+    color: #2d3748;
+    text-align: center;
+  }
+
+  .chat-button {
+    background-color: #38a169;
+    color: white;
+    padding: 6px 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 8px 0;
+    display: inline-block;
+    font-size: 0.85rem;
+  }
+
+  .chat-button:hover {
+    background-color: #2f855a;
+  }
+
+  .status-form {
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .status-form label {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #2d3748;
+  }
+
+  .status-form select {
+    padding: 5px 8px;
+    width: 90%;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    border: 1px solid #c6f6d5;
+    border-radius: 5px;
+    background-color: #f0fdf4;
+    color: #22543d;
+  }
+
+  .status-form button {
+    background-color: #2f855a;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .status-form button:hover {
+    background-color: #276749;
+  }
+
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Top Navbar -->
+  <header class="top-navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='images/leaf-icon.svg') }}" class="navbar-logo" />
+      <span class="navbar-title">Farmers <strong>Dashboard</strong></span>
+    </div>
+    <div class="navbar-right">
+      <form action="/logout" method="POST" style="display:inline;">
+        <button class="icon-btn" title="Logout" type="submit">
+          <img src="{{ url_for('static', filename='images/icon-logout.svg') }}" alt="Logout">
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- ✅ Page Layout -->
+  <div class="container">
+
+    <!-- ✅ Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a href="/farmerdash"><img src="{{ url_for('static', filename='images/icon-dashboard.svg') }}" class="nav-icon" /> Dashboard</a>
+        <a href="/Fmylistings"><img src="{{ url_for('static', filename='images/icon-listings.svg') }}" class="nav-icon" />My Listings</a>
+        <a href="/Forders" class="active"><img src="{{ url_for('static', filename='images/icon-orders.svg') }}" class="nav-icon" />Orders</a>
+      </nav>
+    </aside>
+
+    <!-- ✅ Main Content -->
+    <main class="dashboard-main">
+      <header class="produce-header">
+        <h2>📋 Orders Received</h2>
+      </header>
+
+      <section class="produce-section">
+        {% if orders %}
+          <div class="produce-grid">
+            {% for order in orders %}
+              <div class="produce-card">
+                <img src="{{ order.product_image_url }}" alt="{{ order.product_name }}" class="produce-img">
+                <div class="produce-details">
+                  <h3>{{ order.product_name }}</h3>
+                  <p><strong>Buyer:</strong> {{ order.buyer_name }}</p>
+                  <p><strong>Quantity:</strong> {{ order.quantity }} {{ order.unit }}</p>
+                  <p><strong>Status:</strong> {{ order.status }}</p>
+                  <p><strong>Date:</strong> {{ order.date }}</p>
+                  <a href="/chat/{{ order._id }}" class="chat-button">💬 Negotiate</a>
+
+                  <!-- ✅ Update Status Form -->
+                  <form action="/update-order/{{ order._id }}" method="post" class="status-form">
+                    <label for="status">Update Status:</label>
+                    <select name="status">
+                      <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                      <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                      <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                      <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                    <button type="submit">Update</button>
+                  </form>
+
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="margin-left: 10px;">No orders yet.</p>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+
+  <!-- socket.io client library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"
+        integrity="sha512-…"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+  <!-- ✅ JS and Flash -->
+  <script>
+    document.querySelector(".icon-btn[title='Menu']")?.addEventListener("click", () => {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("hidden");
+    });
+  </script>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="toast-container">
+        {% for msg in messages %}
+          <div class="toast">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

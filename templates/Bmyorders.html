@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Orders | FarmConnect</title>
+  <link rel="stylesheet" href="/static/Bmyorders.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f6fef5;
+    }
+
+    .topbar {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .orders-section {
+      padding: 2rem;
+    }
+
+    h2, h3 {
+      color: #2f855a;
+      margin-bottom: 1rem;
+    }
+
+    .order-card {
+      background: #fff;
+      border: 1px solid #dcecdc;
+      border-left: 5px solid #4CAF50;
+      padding: 1rem 1.5rem;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .order-info {
+      flex: 1;
+    }
+
+    .order-info h4 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #2d3748;
+    }
+
+    .order-info p {
+      margin: 4px 0;
+      color: #4a5568;
+    }
+
+    .order-info strong {
+      color: #1a202c;
+    }
+
+    .no-orders {
+      font-size: 16px;
+      color: #718096;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .badge-pending {
+      background-color: #fbd38d;
+      color: #744210;
+    }
+    .badge-processing {
+      background-color: #bee3f8;
+      color: #2c5282;
+    }
+    .badge-transit {
+      background-color: #90cdf4;
+      color: #2b6cb0;
+    }
+    .badge-delivered {
+      background-color: #c6f6d5;
+      color: #22543d;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>📦 My Orders</h1>
+    <a href="/buyerdash" class="back-btn">← Back to Dashboard</a>
+  </header>
+<section class="orders-section">
+  <h2>📦 Your Orders</h2>
+  {% set your_orders = orders | selectattr("status", "in", ["Pending", "Processing", "Shipped"]) | list %}
+  {% if your_orders %}
+    {% for order in your_orders %}
+      <div class="order-card">
+        <img src="{{ order.product_image_url }}" alt="{{ order.product_name }}">
+        <div class="order-info">
+          <h3>{{ order.product_name }}</h3>
+          <p>Qty: {{ order.quantity }} {{ order.unit }}</p>
+          <p>Placed on: {{ order.date }}</p>
+          {% if order.status == "Pending" %}
+            <span class="badge badge-pending">🕓 Pending</span>
+          {% elif order.status == "Shipped" %}
+            <span class="badge badge-transit">🚚 In Transit</span>
+          {% elif order.status == "Processing" %}
+            <span class="badge badge-processing">⏳ Processing</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="no-orders">No undelivered orders at the moment.</p>
+  {% endif %}
+
+  <h2>✅ Delivered Orders</h2>
+  {% set delivered_orders = orders | selectattr("status", "equalto", "Delivered") | list %}
+  {% if delivered_orders %}
+    {% for order in delivered_orders %}
+      <div class="order-card">
+        <img src="{{ order.product_image_url }}" alt="{{ order.product_name }}">
+        <div class="order-info">
+          <h3>{{ order.product_name }}</h3>
+          <p>Qty: {{ order.quantity }} {{ order.unit }}</p>
+          <p>Delivered on: {{ order.date }}</p>
+          <span class="badge badge-delivered">✅ Delivered</span>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="no-orders">No delivered orders yet.</p>
+  {% endif %}
+</section>
+<!-- socket.io client library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"
+        integrity="sha512-…"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

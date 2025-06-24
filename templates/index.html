@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FarmConnect - Direct from Farmers</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div class="nav-left">
+    <div class="nav-brand">
+      <a href="index.html" style="text-decoration:none ;"><h1>FarmConnect</h1></a>
+    </div>
+  </div>
+
+  <div class="nav-search">
+    <span class="search-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#aaa">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 
+        5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 5 
+        1.49-1.49-5-5zm-6 0C7.01 14 5 11.99 5 
+        9.5S7.01 5 9.5 5 14 7.01 14 
+        9.5 11.99 14 9.5 14z"/>
+      </svg>
+    </span>
+   
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="/about">About</a>   
+      <button class="login-btn" onclick="window.location.href='/signin'">Sign In</button>
+      <button class="signup-btn" onclick="window.location.href='/signup'">Sign Up</button>      
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero-video">
+  <video autoplay loop muted playsinline>
+    <source src="/static/videos/fruits.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-text">
+    <h1>Fresh From Farm to Your Table</h1>
+    <p>Connect directly with local farmers and get the freshest produce at fair prices.</p>
+    <div class="hero-buttons">
+      <button class="shop-btn" onclick="window.location.href='/products'">Shop Now</button>
+      <button class="join-btn" onclick="window.location.href='/signup'">Join as a Farmer</button>
+    </div>
+  </div>
+</header>
+
+
+
+
+<!-- Produce Section -->
+<section class="produce-list" id="produce-list">
+  <div class="produce-header">
+    <h2>Featured Products</h2>
+    <a href="/products" class="view-all-btn">View All ➔</a>
+  </div>
+
+  <div id="produce-container" class="produce-grid">
+    {% for product in products[:10] %}
+      <div
+        class="produce-card"
+        data-name="{{ product.name|lower }}"
+        data-category="{{ product.category|lower }}"
+        data-price="{{ product.price }}"
+      >
+        <img
+          src="{{ product.image or '/static/images/default-produce.jpg' }}"
+          alt="{{ product.name }}"
+        />
+        <div class="produce-info">
+          <h3>{{ product.name }}</h3>
+          <p>₹{{ product.price }} / {{ product.unit }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p>No products available at the moment.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- List Produce Modal -->
+<div id="listing-form" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeListingForm()">&times;</span>
+    <h2>List Your Produce</h2>
+    <form id="produceForm">
+      <input type="text" id="name" placeholder="Produce Name" required />
+      <input type="number" id="price" placeholder="Price per kg" required />
+      <input type="text" id="location" placeholder="Location" required />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- How It Works Section -->
+<section class="how-it-works">
+  <h2 class="section-title">How It Works</h2>
+  <div class="how-it-works-grid">
+    <div class="how-card">
+      <img src="/static/images/shop-icon.png" alt="Shop Directly" class="how-icon">
+      <h3>Shop Directly</h3>
+      <p>Browse fresh produce directly from local farms without any middlemen markup.</p>
+    </div>
+    <div class="how-card">
+      <img src="/static/images/connect-icon.png" alt="Connect with Farmers" class="how-icon">
+      <h3>Connect with Farmers</h3>
+      <p>Communicate directly with farmers to learn about their growing practices and products.</p>
+    </div>
+    <div class="how-card">
+      <img src="/static/images/fairprice-icon.png" alt="Fair Prices" class="how-icon">
+      <h3>Fair Prices</h3>
+      <p>Farmers earn more while consumers pay less by eliminating intermediaries.</p>
+    </div>
+  </div>
+</section> 
+
+
+<!-- Meet Our Farmers Section -->
+<section class="farmers-section">
+  <div class="farmers-header">
+    <h2>Meet Our Farmers</h2>
+    <a href="/farmers" class="view-all-farmers">View All ➔</a>
+  </div>
+
+  <div class="farmers-grid" id="farmers-container">
+    <!-- Farmer cards will be dynamically loaded here by app.js -->
+  </div>
+</section>
+
+<!-- What Our Customers Say Section -->
+<section class="customers-section">
+  <div class="customers-header">
+    <h2>What Our Customers Say?</h2>
+  </div>
+
+  <div class="customers-grid" id="customers-container">
+    <!-- Customer reviews will be loaded dynamically -->
+  </div>
+</section>
+
+<!-- Join Us Section -->
+<section class="join-section">
+  <div class="join-content">
+    <h2>Ready to Transform How You Buy and Sell Farm Products?</h2>
+    <p>Join thousands of farmers and consumers already benefiting from our direct marketplace.</p>
+    <div class="join-buttons">
+      <a href="/signup" class="join-btn filled">Create an Account</a>
+      <a href="/about" class="join-btn outlined">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-column">
+      <h2 class="footer-brand">FarmConnect</h2>
+      <p>Connecting farmers directly with consumers for a sustainable food system.</p>
+    </div>
+
+    <div class="footer-column">
+      <h3>For Farmers</h3>
+      <ul>
+        <li><a href="/signup">Start Selling</a></li>
+        <li><a href="/farmerdash">Farmer Dashboard</a></li>
+        <li><a href="#">Resources</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>For Buyers</h3>
+      <ul>
+        <li><a href="/products">Browse Products</a></li>
+       <li><a href="/howitworks">How It Works</a></li>
+
+        <li><a href="/faq">FAQ</a></li>
+
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  
+
+
+
+  <div class="footer-bottom">
+    <p>© 2025 FarmConnect. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="/static/javascript/app.js"></script>
+</body>
+</html>

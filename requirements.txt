@@ -1,0 +1,9 @@
+Flask
+dnspython
+eventlet
+flask_pymongo
+flask_socketio
+gridfs
+pymongo
+python-dotenv
+requests

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat History</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      background: #f7fdf8;
+      color: #183a1d;
+    }
+
+    h2 {
+      color: #14532d;
+      margin-bottom: 20px;
+    }
+
+    .msg {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+
+    .msg strong {
+      color: #14532d;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      background: #38a169;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: #14532d;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📜 Chat History for Order</h2>
+
+  <!-- ✅ Flash Messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ✅ Chat Messages -->
+  {% for msg in messages %}
+    <div class="msg">
+      <strong>{{ msg.from }}:</strong> {{ msg.text }}
+    </div>
+  {% else %}
+    <p>No messages found for this order.</p>
+  {% endfor %}
+
+  <!-- ✅ Back Link -->
+  <a href="javascript:history.back()" class="back-link">← Go Back</a>
+
+</body>
+</html>

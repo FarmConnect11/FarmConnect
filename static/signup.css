@@ -1,0 +1,220 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fdfdfb;
+  color: #333;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fefefc;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Ensure navbar stays at top */
+header {
+  flex-shrink: 0;
+}
+
+/* Wrapper for form content */
+.signup-page {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Signup box styling */
+.auth-container {
+  max-width: 400px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  height: 60px; /* reduce height */
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter', sans-serif;
+}
+
+.brand {
+  font-size: 22px; /* smaller than before */
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.nav-links a {
+  font-size: 16px;
+  margin-left: 20px;
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+
+/* Signup Section */
+.signup-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: calc(100vh - 60px); /* subtract navbar height */
+  padding: 0 40px;
+  margin-top: 60px; /* space just below navbar */
+}
+
+
+.signup-card-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.signup-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px; /* ✅ same as signin */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.signup-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.subtext {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+.tab.active {
+  background-color: #4D7C0F;
+  color: white;
+  font-weight: 600;
+}
+
+/* Forms */
+.form {
+  display: none;
+  flex-direction: column;
+  text-align: left;
+  gap: 1rem;
+}
+.form.active {
+  display: flex;
+}
+.form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.submit-btn {
+  background-color: #4D7C0F;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.submit-btn:hover {
+  background-color: #65A30D;
+}
+
+/* Divider */
+.divider {
+  margin: 2rem 0 1rem;
+  text-align: center;
+  position: relative;
+}
+.divider span {
+  background: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+  font-size: 0.85rem;
+  color: #888;
+}
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  z-index: 0;
+}
+
+/* Social buttons */
+.social-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.outline-btn {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Signin Link */
+.signin-link {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+.signin-link a {
+  color: #4D7C0F;
+  text-decoration: none;
+}
+.signin-link a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */

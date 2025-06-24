@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Listings | Farmer Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='farmerdash.css') }}">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='images/leaf-icon.svg') }}" class="navbar-logo" alt="Logo" />
+      <span class="navbar-title">Farmers <strong>Dashboard</strong></span>
+    </div>
+    <div class="navbar-right">
+  <form action="/logout" method="POST" style="display:inline;">
+    <button class="icon-btn" title="Logout" type="submit">
+      <img src="{{ url_for('static', filename='images/icon-logout.svg') }}" alt="Logout">
+    </button>
+  </form>
+</div>
+
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar"id="sidebar" >
+      
+      <nav class="sidebar-nav">
+        <a href="/farmerdash">
+          <img src="{{ url_for('static', filename='images/icon-dashboard.svg') }}" class="nav-icon" alt="" />
+          Dashboard
+        </a>
+        <a href="/mylistings" class="active">
+          <img src="{{ url_for('static', filename='images/icon-listings.svg') }}" class="nav-icon" alt="" />
+          My Listings
+        </a>
+        <a href="/orders">
+          <img src="{{ url_for('static', filename='images/icon-orders.svg') }}" class="nav-icon" alt="" />
+          Orders
+        </a>
+       
+      </nav>
+    </aside>
+<main>
+  <div class="produce-header">
+    <h2>My Listings</h2>
+  </div>
+
+  {% if listings|length == 0 %}
+    <p style="margin-left: 20px;">No produce listed yet.</p>
+  {% else %}
+    <div class="produce-section">
+      {% for item in listings %}
+      <div class="produce-card">
+        <img src="{{ '/' + item.image }}" alt="{{ item.name }}">
+        <h3>{{ item.name }}</h3>
+        <p>₹{{ item.price }} kg</p>
+        <button onclick="openDeleteModal('{{ item._id }}')" class="delete-icon-btn" title="Delete">
+          <img src="{{ url_for('static', filename='images/icon-delete.svg') }}" alt="Delete">
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</main>
+<script>
+  document.querySelector(".icon-btn[title='Menu']").addEventListener("click", () => {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("hidden");
+  });
+</script>
+
+</body>
+</html>

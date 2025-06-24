@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | FarmConnect</title>
+  <link rel="stylesheet" href="/static/signup.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <a href="/" style="text-decoration: none;"><h1 class="brand">FarmConnect</h1></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ✅ Signup Content Wrapper -->
+  <div class="signup-page">
+    <main class="signup-wrapper">
+      <div class="signup-card">
+        <h2>Create an account</h2>
+        <p class="subtext">Join our community to buy fresh produce or sell your farm products</p>
+
+        <div class="tabs">
+          <button class="tab active" onclick="showTab('buyer')">I'm a Buyer</button>
+          <button class="tab" onclick="showTab('farmer')">I'm a Farmer</button>
+        </div>
+
+        <form id="buyerForm" class="form active" method="POST" action="/signup">
+          {% if error %}
+            <p style="color: red; font-size: 14px; margin-bottom: 6px;">{{ error }}</p>
+          {% endif %}
+
+          <label>Full Name</label>
+          <input type="text" name="name" required />
+
+          <label>Email</label>
+          <input type="email" name="email" required />
+
+          <label>Password</label>
+          <input type="password" name="password" required />
+
+          <label>Confirm Password</label>
+          <input type="password" name="confirmPassword" required />
+
+          <input type="hidden" name="role" value="buyer" />
+          <button type="submit" class="submit-btn">Sign Up as Buyer</button>
+        </form>
+
+        <form id="farmerForm" class="form" method="POST" action="/signup">
+          {% if error %}
+            <p style="color: red; font-size: 14px; margin-bottom: 6px;">{{ error }}</p>
+          {% endif %}
+
+          <label>Farm Name</label>
+          <input type="text" name="name" required />
+
+          <label>Email</label>
+          <input type="email" name="email" required />
+
+          <label>Password</label>
+          <input type="password" name="password" required />
+
+          <label>Confirm Password</label>
+          <input type="password" name="confirmPassword" required />
+
+          <input type="hidden" name="role" value="farmer" />
+          <button type="submit" class="submit-btn">Sign Up as Farmer</button>
+        </form>
+
+        <p class="signin-link">Already have an account? <a href="/signin">Sign in</a></p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showTab(role) {
+      document.getElementById('buyerForm').classList.remove('active');
+      document.getElementById('farmerForm').classList.remove('active');
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+      document.getElementById(role + 'Form').classList.add('active');
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(role)) tab.classList.add('active');
+      });
+    }
+  </script>
+</body>
+</html>

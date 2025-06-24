@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings | FarmConnect</title>
+  <link rel="stylesheet" href="/static/Bsettings.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>⚙️ Settings</h1>
+    <a href="/buyerdash" class="back-btn">← Back to Dashboard</a>
+  </header>
+
+  <section class="settings-section">
+    <form method="POST" action="/update-settings" enctype="multipart/form-data" class="settings-form">
+      
+      <!-- Profile Photo -->
+      <label for="profile_photo">Profile Photo</label>
+      <input type="file" id="profile_photo" name="profile_photo" accept="image/*">
+      {% if user.profile_photo %}
+        <img src="{{ user.profile_photo }}" alt="Profile Photo" class="profile-preview">
+      {% endif %}
+
+      <!-- Basic Info -->
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" value="{{ user.name }}">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+
+      <button type="submit">Save Changes</button>
+    </form>
+
+    <!-- Change Password Form -->
+    <form method="POST" action="/change-password" class="change-password-form">
+      <h2>🔒 Change Password</h2>
+
+      <label for="current_password">Current Password</label>
+      <input type="password" id="current_password" name="current_password" required>
+
+      <label for="new_password">New Password</label>
+      <input type="password" id="new_password" name="new_password" required>
+
+      <label for="confirm_password">Confirm New Password</label>
+      <input type="password" id="confirm_password" name="confirm_password" required>
+
+      <button type="submit">Update Password</button>
+    </form>
+  </section>
+</body>
+</html>
