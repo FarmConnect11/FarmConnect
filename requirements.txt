@@ -6,3 +6,4 @@ flask_socketio
 pymongo
 python-dotenv
 requests
+gunicorn
